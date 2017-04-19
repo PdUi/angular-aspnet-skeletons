@@ -1,0 +1,9 @@
+# client
+coverage
+dist
+node_modules
+semantic
+
+# server
+bin
+obj
