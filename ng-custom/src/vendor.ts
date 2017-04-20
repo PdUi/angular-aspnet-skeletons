@@ -4,3 +4,5 @@ import '@angular/core';
 import '@angular/common';
 
 import 'rxjs';
+
+import '../semantic/dist/semantic.min.css';
