@@ -101,12 +101,12 @@ module.exports = webpackMerge(commonConfig, {
       }
     }),
     new AotPlugin({
-      mainPath: 'src\\main.ts',
+      mainPath: helpers.root('./src/main.ts'),
       hostReplacementPaths: {
         'src\\environments\\environment.ts': 'src\\environments\\environment.prod.ts'
       },
       exclude: [],
-      tsConfigPath: 'tsconfig.json'
+      tsConfigPath: helpers.root('./config/tsconfig.aot.json')
     })
   ]
 });
