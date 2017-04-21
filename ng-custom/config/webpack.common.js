@@ -1,39 +1,34 @@
-var path = require('path');
-function root(args) {
-  args = Array.prototype.slice.call(arguments, 0);
-  return path.join.apply(path, [__dirname].concat(args));
-}
-
-var webpack = require('webpack');
-
+const helpers = require('./helpers');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ProgressPlugin = require('webpack/lib/ProgressPlugin');
+const { BaseHrefWebpackPlugin } = require('@angular/cli/plugins/webpack');
 
-const entryPoints = ['polyfills', 'vendor', 'main'];
+// the order of these entry points is important, do not rearrange
+const entryPoints = [
+  'polyfills',
+  'vendor',
+  'main',
+  'vendor-styles'
+];
 
 module.exports = {
+  // output: {
+  //   publicPath: '/'
+  // },
   entry: {
-      main: [
-          './src/main.ts'
-      ],
-      polyfills: [
-          './src/polyfills.ts'
-      ],
-      vendor: [
-          './src/vendor.ts'
-      ]
-  },
-  output: {
-    filename: '[name].bundle.js',
-    chunkFilename: '[id].chunk.js',
-    path: root('./dist')
+    main: ['./src/main.ts'],
+    polyfills: ['./src/polyfills.ts'],
+    vendor: ['./src/vendor.ts'],
+    'vendor-styles': ['./semantic/dist/semantic.min.css']
   },
   module: {
     rules: [
       {
         test: /\.ts$/,
         loaders: [
-            'awesome-typescript-loader',
-            'angular2-template-loader'
+          'awesome-typescript-loader',
+          'angular2-template-loader'
         ],
         exclude: /\/node_modules\//
       },
@@ -44,27 +39,21 @@ module.exports = {
       {
         test: /\.html$/,
         loader: 'html-loader'
-      },
-      {
-        test: /\.css$/,
-        loaders: 'style-loader!css-loader'
       }
     ]
   },
   plugins: [
+    new BaseHrefWebpackPlugin({}),
+    new ProgressPlugin(),
     new webpack.ContextReplacementPlugin(
-      // The (\\|\/) piece accounts for path separators in *nix and Windows
-      /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-      root('./src'), // location of your src
+      /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/, // The (\\|\/) piece accounts for path separators in *nix and Windows
+      helpers.root('src'), // location of your src
       {} // a map of your routes
     ),
     new webpack.optimize.CommonsChunkPlugin({
-      name: ['main', 'vendor', 'polyfills']
-    }),
-    new webpack.LoaderOptionsPlugin({
-      htmlLoader: {
-        minimize: false // workaround for ng2
-      }
+      name: 'vendor',
+      minChunks: (module) => module.resource && module.resource.startsWith(helpers.root('node_modules')),
+      chunks: ['main']
     }),
     new HtmlWebpackPlugin({
       template: './src\\index.html',
@@ -96,13 +85,25 @@ module.exports = {
   ],
   resolve: {
     extensions: [
-        '.ts',
-        '.js'
+      '.ts',
+      '.js'
     ]
   },
-  devtool: 'inline-source-map',
   devServer: {
+    compress: true,
+    contentBase: './dist/',
     historyApiFallback: true,
     stats: 'minimal'
+  },
+  node: {
+    fs: 'empty',
+    global: true,
+    crypto: 'empty',
+    tls: 'empty',
+    net: 'empty',
+    process: true,
+    module: false,
+    clearImmediate: false,
+    setImmediate: false
   }
 };
