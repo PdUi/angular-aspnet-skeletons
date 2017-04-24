@@ -9,7 +9,7 @@
         "sourceMap": true,
         "target": "es2015",
         "typeRoots" : [
-            "./node_modules/@types"
+            "../node_modules/@types"
         ],
         "lib": [
             "es2016",
@@ -17,8 +17,9 @@
         ]
     },
     "include": [
-        "src/**/*.ts"
+        "../src/**/*.ts"
     ],
     "exclude": [
+        "../src/main.aot.ts"
     ]
 }
