@@ -4,4 +4,5 @@ import '@angular/core';
 import '@angular/common';
 import '@angular/router';
 
+/* tslint:disable-next-line */
 import 'rxjs';
