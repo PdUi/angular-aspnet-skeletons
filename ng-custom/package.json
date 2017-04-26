@@ -3,19 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "semantic:build": "node_modules/.bin/gulp --gulpfile ./semantic/gulpfile.js build",
-    "clean": "rimraf aot && rimraf dist && rimraf semantic/dist",
-    "prebuild:dev": "npm run clean && npm run semantic:build",
-    "build:dev": "node_modules/.bin/webpack --config ./config/webpack.dev.js",
-    "preserve:dev": "npm run build:dev",
-    "serve:dev": "node_modules/.bin/webpack-dev-server --config ./config/webpack.dev.js",
-    "prebuild:prod": "npm run securityscan  && npm run lint && npm run clean && mkdirp aot/src && ncp src aot/src && ncp config/tsconfig.aot.json aot/tsconfig.aot.json",
-    "build:prod": "npm run semantic:build && npm run compile:aot && npm run rollup",
-    "postbuild:prod": "node build/postbuild.prod.js",
-    "compile:aot": "node_modules/.bin/ngc -p aot/tsconfig.aot.json",
-    "rollup": "node_modules/.bin/rollup -c config/rollup-config.js",
-    "securityscan": "node_modules/.bin/nsp check",
-    "lint": "node_modules/.bin/tslint -c config/tslint.json src/**/*.ts"
+    "lint": "tslint -c config/tslint.json src/**/*.ts",
+
+    "prebuild": "node build/clean.js && gulp --gulpfile ./semantic/gulpfile.js build",
+    "build:dev": "npm run prebuild && webpack --config ./config/webpack.dev.js",
+    "serve:dev": "npm run build:dev && webpack-dev-server --config ./config/webpack.dev.js",
+
+    "prebuild:prod": "npm run prebuild && nsp check  && npm run lint && node build/prebuild.prod.js",
+    "build:prod": "ngc -p aot/tsconfig.aot.json && rollup -c config/rollup-config.js && node build/postbuild.prod.js",
+    "serve:prod": "npm run build:prod && browser-sync start --server aot/dist --port 8080"
   },
   "author": "Peineary Development",
   "license": "MIT",
@@ -25,6 +21,7 @@
     "@types/node": "^7.0.13",
     "angular2-template-loader": "^0.6.2",
     "awesome-typescript-loader": "^3.1.2",
+    "browser-sync": "^2.18.8",
     "codelyzer": "^3.0.0",
     "css-loader": "^0.28.0",
     "extract-text-webpack-plugin": "^2.1.0",
