@@ -6,7 +6,7 @@
   "version": "1.0.0",
   "scripts": {
     "lint": "tslint -c config/tslint.json src/**/*.ts",
-    "prebuild": "node build/clean.js && gulp --gulpfile ./semantic/gulpfile.js build",
+    "prebuild": "node build/clean.js && gulp --gulpfile ./src/styles/semantic/gulpfile.js build",
     "build:dev": "npm run prebuild && webpack --config ./config/webpack.dev.js",
     "launch:dev": "npm run build:dev && webpack-dev-server --config ./config/webpack.dev.js",
     "expose:dev": "concurrently \"npm run launch:dev\" \"lt --port 8080 --subdomain peinearydevelopment\"",

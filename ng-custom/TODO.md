@@ -4,5 +4,3 @@
     - [tslint](http://stackoverflow.com/questions/42515582/how-do-i-get-tslint-to-watch-for-changes-in-a-specific-folder)
 - Investigate rollup with [multiple bundles](https://www.codementor.io/stevebelovarich/use-rollup-to-build-angular-2-web-apps-du1089cq5) (cache purposes)
 - Implement rollup for styles: [rollup-css](https://code.lengstorf.com/learn-rollup-css/)
-- Update prod build to also output files to dist/ instead of aot/dist/
-- Move semantic dir to src/styles/semantic

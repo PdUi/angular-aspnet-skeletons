@@ -5,19 +5,24 @@ var ncp = require('ncp').ncp;
 var aotDistDir = path.resolve(__dirname, '../aot', 'dist');
 var aotSrcDir = path.resolve(__dirname, '../aot', 'src');
 var nodeModulesDir = path.resolve(__dirname, '../node_modules');
-var semanticDir = path.resolve(__dirname, '../semantic/dist');
+var semanticDir = path.resolve(__dirname, '../src/styles/semantic/dist');
+var distDir = path.resolve(__dirname, '../dist');
 
-copyFiles();
-performFileUpdatesForHash();
+copyFiles(performFileUpdatesForHash);
 
-function copyFiles () {
-    var filesToCopy = [
-        { input: path.resolve(nodeModulesDir, 'core-js/client/shim.min.js'), output: path.resolve(aotDistDir, 'shim.min.js') },
-        { input: path.resolve(nodeModulesDir, 'zone.js/dist/zone.min.js'), output: path.resolve(aotDistDir, 'zone.min.js') },
-        { input: path.resolve(semanticDir, 'semantic.min.css'), output: path.resolve(aotDistDir, 'semantic.min.css') }
-    ];
+function copyFiles (callback) {
+    ncp(aotDistDir, distDir, (err) => {
+        if (err) return console.log(err);
 
-    filesToCopy.forEach(fileToCopy => ncp(fileToCopy.input, fileToCopy.output));
+        var filesToCopy = [
+            { input: path.resolve(nodeModulesDir, 'core-js/client/shim.min.js'), output: path.resolve(distDir, 'shim.min.js') },
+            { input: path.resolve(nodeModulesDir, 'zone.js/dist/zone.min.js'), output: path.resolve(distDir, 'zone.min.js') },
+            { input: path.resolve(semanticDir, 'semantic.min.css'), output: path.resolve(distDir, 'semantic.min.css') }
+        ];
+
+        filesToCopy.forEach(fileToCopy => ncp(fileToCopy.input, fileToCopy.output));
+        callback();
+    });
 }
 
 function updateFileWithHash(fileName, hash) {
@@ -27,8 +32,8 @@ function updateFileWithHash(fileName, hash) {
     var fullFileName = fileName + '.js';
     var fullHashFileName = fileName + '.' + hash + '.js';
 
-    var inputFile = path.resolve(aotDistDir, fullMapFileName);
-    var outputFile = path.resolve(aotDistDir, fullMapHashFileName);
+    var inputFile = path.resolve(distDir, fullMapFileName);
+    var outputFile = path.resolve(distDir, fullMapHashFileName);
 
     fs.readFile(inputFile, 'utf8', (err, data) => {
         if (err) return console.log(err);
@@ -44,7 +49,7 @@ function updateFileWithHash(fileName, hash) {
 
 function updateIndexFile (fileHashes) {
     var indexFileSrc = path.resolve(aotSrcDir, 'index.aot.html');
-    var indexFileDest = path.resolve(aotDistDir, 'index.html');
+    var indexFileDest = path.resolve(distDir, 'index.html');
     fs.readFile(indexFileSrc, 'utf8', (err, data) => {
         if (err) return console.log(err);
 
@@ -62,7 +67,7 @@ function updateIndexFile (fileHashes) {
 }
 
 function performFileUpdatesForHash () {
-    fs.readdir(aotDistDir, (err, files) => {
+    fs.readdir(distDir, (err, files) => {
         if (err) return console.log(err);
 
         var fileHashes = [];

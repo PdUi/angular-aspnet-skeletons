@@ -12,7 +12,7 @@ module.exports = {
     watchOptions: {
         ignoreInitial: true
     },
-    server: 'aot/dist',
+    server: 'dist',
     proxy: false,
     port: 8080,
     middleware: [require('compression')()],
