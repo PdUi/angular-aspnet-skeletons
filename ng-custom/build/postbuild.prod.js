@@ -5,7 +5,6 @@ var ncp = require('ncp').ncp;
 var aotDistDir = path.resolve(__dirname, '../aot', 'dist');
 var aotSrcDir = path.resolve(__dirname, '../aot', 'src');
 var nodeModulesDir = path.resolve(__dirname, '../node_modules');
-var semanticDir = path.resolve(__dirname, '../src/styles/semantic/dist');
 var distDir = path.resolve(__dirname, '../dist');
 
 copyFiles(performFileUpdatesForHash);
@@ -17,10 +16,12 @@ function copyFiles (callback) {
         var filesToCopy = [
             { input: path.resolve(nodeModulesDir, 'core-js/client/shim.min.js'), output: path.resolve(distDir, 'shim.min.js') },
             { input: path.resolve(nodeModulesDir, 'zone.js/dist/zone.min.js'), output: path.resolve(distDir, 'zone.min.js') },
-            { input: path.resolve(semanticDir, 'semantic.min.css'), output: path.resolve(distDir, 'semantic.min.css') }
+            { input: path.resolve(aotSrcDir, 'web.config'), output: path.resolve(distDir, 'web.config') },
+            { input: path.resolve(aotSrcDir, 'manifest.json'), output: path.resolve(distDir, 'manifest.json') }
         ];
 
         filesToCopy.forEach(fileToCopy => ncp(fileToCopy.input, fileToCopy.output));
+        ncp(path.resolve(aotSrcDir, 'images'), path.resolve(distDir, 'images'));
         callback();
     });
 }
@@ -66,6 +67,23 @@ function updateIndexFile (fileHashes) {
     });
 }
 
+function updateServiceWorkerFile (fileHashes) {
+    var serviceWorkerFileSrc = path.resolve(aotSrcDir, 'service-worker.js');
+    var serviceWorkerFileDest = path.resolve(distDir, 'service-worker.js');
+    fs.readFile(serviceWorkerFileSrc, 'utf8', (err, data) => {
+        if (err) return console.log(err);
+
+        var result = data;
+        fileHashes.forEach(fileHash => {
+            result = data.replace(new RegExp("'./" + fileHash.name + ".js'"), "'./" + fileHash.name + "." + fileHash.hash + ".js'");
+        });
+
+        fs.writeFile(serviceWorkerFileDest, result, 'utf8', function (err) {
+            if (err) return console.log(err);
+        });
+    });
+}
+
 function performFileUpdatesForHash () {
     fs.readdir(distDir, (err, files) => {
         if (err) return console.log(err);
@@ -82,5 +100,6 @@ function performFileUpdatesForHash () {
         });
 
         updateIndexFile(fileHashes);
+        updateServiceWorkerFile(fileHashes);
     });
 }
