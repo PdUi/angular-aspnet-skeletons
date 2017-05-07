@@ -1,0 +1,6 @@
+# client
+aot/
+dist/
+node_modules/
+semantic/
+**/*.log

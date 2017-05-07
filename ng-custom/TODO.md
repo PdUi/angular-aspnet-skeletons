@@ -7,3 +7,4 @@
 - Investigate [progressive web apps](https://developers.google.com/web/fundamentals/getting-started/codelabs/your-first-pwapp/)
     - https://github.com/GoogleChrome/sw-precache
 - IIS rewrite rule is disabled because self signed cert isn't working for localhost([related GitHub issue](https://github.com/jakearchibald/simple-serviceworker-tutorial/issues/6))
+- Remove copy step for prod build: add vscode/gitignore settings for transpiled files

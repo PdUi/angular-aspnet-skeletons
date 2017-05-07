@@ -20,7 +20,7 @@ module.exports = {
     main: ['./src/main.ts'],
     polyfills: ['./src/polyfills.ts'],
     vendor: ['./src/vendor.ts'],
-    'vendor-styles': ['./semantic/dist/semantic.min.css']
+    'vendor-styles': ['./src/styles/semantic/dist/semantic.min.css']
   },
   module: {
     rules: [

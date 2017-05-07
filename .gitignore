@@ -1,11 +1,2 @@
-# client
-aot
-coverage
-dist
 node_modules
-semantic
 **/*.log
-
-# server
-bin
-obj
