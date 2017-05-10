@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppComponent snaps 1`] = `
+<app-root
+  title={[Function String]}
+>
+  <h1
+    class="ui header"
+  >
+    
+  </h1>
+</app-root>
+`;

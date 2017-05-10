@@ -3,29 +3,11 @@
     "__TS_CONFIG__": "config/tsconfig.test.json",
     "__TRANSFORM_HTML__": true
   },
-  "transform": {
-    "^.+\\.(ts|js|html)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-  },
-  "testMatch": [
-    "**/__tests__/**/*.ts",
-    "**/?(*.)(spec|test).ts"
-  ],
-  "moduleFileExtensions": [
-    "ts",
-    "js",
-    "json",
-    "html"
-  ],
   "mapCoverage": true,
   "rootDir": "../",
   "roots": [
-    "<rootDir>/src/"
+    "<rootDir>/src"
   ],
-  "moduleNameMapper": {
-    "(.*)": "<rootDir>/src/$1"
-  },
-  "transformIgnorePatterns": [
-    "<rootDir>/node_modules/(?!@ngrx)"
-  ],
+  "preset": "jest-preset-angular",
   "setupTestFrameworkScriptFile": "<rootDir>/test/setupJest.ts"
 }
