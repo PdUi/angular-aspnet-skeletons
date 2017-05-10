@@ -17,7 +17,7 @@
     "launch:sme:dev": "source-map-explorer dist/vendor.bundle.js",
     "launch:sme:prod": "source-map-explorer aot/dist/build.c15b16c40b12cdabce7bb264c17707d83e69d1aa04f1298be7e55aedc10d5ae4.js aot/dist/build.c15b16c40b12cdabce7bb264c17707d83e69d1aa04f1298be7e55aedc10d5ae4.js.map",
     "lighthouse": "node_modules/.bin/lighthouse http://localhost/ngcustom --output json",
-    "test": "jest --config=config/jest-config.json"
+    "test": "jest --config ./config/jest-config.json"
   },
   "dependencies": {
     "@angular/common": "^4.0.3",
